@@ -18,7 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "emprestimos")
+@Table(name = "emprestimos", schema = "emprestimo")
 public class Emprestimo  implements Serializable{
 
 
