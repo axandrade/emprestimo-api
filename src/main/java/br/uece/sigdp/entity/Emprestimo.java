@@ -5,8 +5,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import br.uece.sigdp.entity.enums.StatusPagamento;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,13 +39,14 @@ public class Emprestimo  implements Serializable{
     @Column(name = "numero_parcelas", nullable = false)
     private int numeroParcelas;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status_pagamento", length = 50, nullable = false)
-    private String statusPagamento;
+    private StatusPagamento statusPagamento;
 
     @Column(name = "data_criacao", nullable = false)
     private LocalDate dataCriacao;
     
-    public Emprestimo(Pessoa pessoa, BigDecimal valorEmprestimo, int numeroParcelas, String statusPagamento, LocalDate dataCriacao) {
+    public Emprestimo(Pessoa pessoa, BigDecimal valorEmprestimo, int numeroParcelas, StatusPagamento statusPagamento, LocalDate dataCriacao) {
         this.pessoa = pessoa;
         this.valorEmprestimo = valorEmprestimo;
         this.numeroParcelas = numeroParcelas;
@@ -82,11 +86,11 @@ public class Emprestimo  implements Serializable{
         this.numeroParcelas = numeroParcelas;
     }
 
-    public String getStatusPagamento() {
+    public StatusPagamento getStatusPagamento() {
         return statusPagamento;
     }
 
-    public void setStatusPagamento(String statusPagamento) {
+    public void setStatusPagamento(StatusPagamento statusPagamento) {
         this.statusPagamento = statusPagamento;
     }
 

@@ -3,8 +3,8 @@ package br.uece.sigdp.entity.enums;
 import java.math.BigDecimal;
 
 public enum TipoIdentificador {
-    CPF(11, new BigDecimal("300.00"), new BigDecimal("10000.00")),
-    CNPJ(14, new BigDecimal("1000.00"), new BigDecimal("100000.00")),
+    PESSOA_FISICA(11, new BigDecimal("300.00"), new BigDecimal("10000.00")),
+    PESSOA_JURIDICA(14, new BigDecimal("1000.00"), new BigDecimal("100000.00")),
     ESTUDANTE_UNIVERSITARIO(8, new BigDecimal("100.00"), new BigDecimal("10000.00")),
     APOSENTADO(10, new BigDecimal("400.00"), new BigDecimal("25000.00"));
 

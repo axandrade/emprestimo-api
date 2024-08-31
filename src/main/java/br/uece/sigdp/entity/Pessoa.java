@@ -19,7 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "pessoas")
+@Table(name = "pessoas", schema = "emprestimo")
 public class Pessoa implements Serializable{
 			
 	private static final long serialVersionUID = -1723700870639006755L;
@@ -51,6 +51,8 @@ public class Pessoa implements Serializable{
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Emprestimo> emprestimos;
 	
+    public Pessoa() {
+	}
 
 	public Pessoa(Long id, String nome, String identificador, LocalDate dataNascimento) {
 		this.id = id;
