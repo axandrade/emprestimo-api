@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.uece.sigdp.entity.Emprestimo;
 import br.uece.sigdp.entity.Pessoa;
 import br.uece.sigdp.entity.dto.EmprestimoDTO;
-import br.uece.sigdp.exceptions.EmprestimoInvalidoException;
+import br.uece.sigdp.exceptions.EmprestimoException;
 import br.uece.sigdp.service.EmprestimoService;
 import br.uece.sigdp.service.PessoaService;
 
@@ -27,35 +27,33 @@ public class EmprestimoController {
 	@Autowired
 	private EmprestimoService emprestimoService;
 	
-	@PostMapping("/realizar")
-	public ResponseEntity<String> realizarEmprestimo(@RequestBody EmprestimoDTO emprestimoDTO) {
-		Optional<Pessoa> pessoaOpt = pessoaService
-				.findPessoaByIdentificador(emprestimoDTO.getPessoa().getIdentificador());
+	@PostMapping("/realizar-emprestimo")
+	public ResponseEntity<Emprestimo> realizarEmprestimo(@RequestBody EmprestimoDTO emprestimoDTO) {
+	    Optional<Pessoa> pessoaOpt = pessoaService
+	            .findPessoaByIdentificador(emprestimoDTO.getPessoa().getIdentificador());
 
-		if (pessoaOpt.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa não encontrada.");
-		}
+	    if (pessoaOpt.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	    }
 
-		Pessoa pessoa = pessoaOpt.get();
+	    Pessoa pessoa = pessoaOpt.get();
 
-		try {
-			if (!pessoaService.isIdentificadorValido(pessoa.getTipoIdentificador(), pessoa.getIdentificador())) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Identificador inválido.");
-			}
+	    try {
+	        if (!pessoaService.isIdentificadorValido(pessoa.getTipoIdentificador(), pessoa.getIdentificador())) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	        }
 
-			pessoaService.validarLimitesEmprestimo(pessoa, emprestimoDTO.getValorEmprestimo(), emprestimoDTO.getNumeroParcelas());
+	        pessoaService.validarLimitesEmprestimo(pessoa, emprestimoDTO.getValorEmprestimo(), emprestimoDTO.getNumeroParcelas());
 
-			Emprestimo emprestimo = emprestimoService.criarEmprestimo(pessoa, emprestimoDTO.getValorEmprestimo(),
-					emprestimoDTO.getNumeroParcelas());
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body("Empréstimo realizado com sucesso. ID do Empréstimo: " + emprestimo.getId());
+	        Emprestimo emprestimo = emprestimoService.criarEmprestimo(pessoa, emprestimoDTO.getValorEmprestimo(),
+	                emprestimoDTO.getNumeroParcelas());
+	        return ResponseEntity.status(HttpStatus.CREATED).body(emprestimo);
 
-		
-		} catch (EmprestimoInvalidoException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao processar o empréstimo.");
-		}
+	    } catch (EmprestimoException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
 	}
 
 }

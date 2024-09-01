@@ -3,9 +3,11 @@ package br.uece.sigdp.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 import br.uece.sigdp.entity.enums.StatusPagamento;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -44,7 +47,13 @@ public class Emprestimo  implements Serializable{
     private StatusPagamento statusPagamento;
 
     @Column(name = "data_criacao", nullable = false)
-    private LocalDate dataCriacao;
+    private LocalDate dataCriacao;   
+    
+    @OneToMany(mappedBy = "emprestimo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pagamento> pagamentos;
+    
+    public Emprestimo() {
+	}
     
     public Emprestimo(Pessoa pessoa, BigDecimal valorEmprestimo, int numeroParcelas, StatusPagamento statusPagamento, LocalDate dataCriacao) {
         this.pessoa = pessoa;
@@ -100,9 +109,17 @@ public class Emprestimo  implements Serializable{
 
     public void setDataCriacao(LocalDate dataCriacao) {
         this.dataCriacao = dataCriacao;
-    }
+    }   	
 
-    @Override
+	public List<Pagamento> getPagamentos() {
+		return pagamentos;
+	}
+
+	public void setPagamentos(List<Pagamento> pagamentos) {
+		this.pagamentos = pagamentos;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

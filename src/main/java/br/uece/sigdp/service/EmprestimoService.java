@@ -18,8 +18,13 @@ public class EmprestimoService {
 	private EmprestimoRepository emprestimoRepository;
 
 	public Emprestimo criarEmprestimo(Pessoa pessoa, BigDecimal valorEmprestimo, int numeroParcelas) {
-		Emprestimo emprestimo = new Emprestimo(pessoa, valorEmprestimo, numeroParcelas, StatusPagamento.PENDENTE, LocalDate.now());
-		return emprestimoRepository.save(emprestimo);
+	    try {
+	        Emprestimo emprestimo = new Emprestimo(pessoa, valorEmprestimo, numeroParcelas, StatusPagamento.PENDENTE, LocalDate.now());
+	        return emprestimoRepository.save(emprestimo);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Erro ao criar o empréstimo.", e); 
+	    }
 	}
 
 }

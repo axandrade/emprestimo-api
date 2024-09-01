@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.uece.sigdp.entity.Pessoa;
 import br.uece.sigdp.entity.enums.TipoIdentificador;
-import br.uece.sigdp.exceptions.EmprestimoInvalidoException;
+import br.uece.sigdp.exceptions.EmprestimoException;
 import br.uece.sigdp.exceptions.IdentificadorInvalidoException;
 import br.uece.sigdp.repository.PessoaRepository;
 import br.uece.sigdp.validator.IdentificadorValidator;
@@ -45,16 +45,16 @@ public class PessoaService {
 	
 	public boolean validarLimitesEmprestimo(Pessoa pessoa, BigDecimal valorEmprestimo, int numeroParcelas) {
 	    if (valorEmprestimo.compareTo(pessoa.getValorMaximoEmprestimo()) > 0) {
-	        throw new EmprestimoInvalidoException("Valor do empréstimo excede o valor máximo permitido para o tipo de identificador.");
+	        throw new EmprestimoException("Valor do empréstimo excede o valor máximo permitido para o tipo de identificador.");
 	    }
 
 	    BigDecimal valorParcela = valorEmprestimo.divide(BigDecimal.valueOf(numeroParcelas), 2, RoundingMode.HALF_UP);
 	    if (valorParcela.compareTo(pessoa.getValorMinimoMensalParcelas()) < 0) {
-	        throw new EmprestimoInvalidoException("Valor da parcela é inferior ao valor mínimo permitido para o tipo de identificador.");
+	        throw new EmprestimoException("Valor da parcela é inferior ao valor mínimo permitido para o tipo de identificador.");
 	    }
 
 	    if (numeroParcelas > MAXIMO_PARCELAS_PERMITIDAS) {
-	        throw new EmprestimoInvalidoException("Número de parcelas excede o máximo permitido ("+ MAXIMO_PARCELAS_PERMITIDAS + " parcelas).");
+	        throw new EmprestimoException("Número de parcelas excede o máximo permitido ("+ MAXIMO_PARCELAS_PERMITIDAS + " parcelas).");
 	    }
 
 	    return true;

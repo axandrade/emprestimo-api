@@ -1,6 +1,7 @@
 package br.uece.sigdp.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "pagamento", schema = "emprestimo")
+@Table(name = "pagamentos", schema = "emprestimo")
 public class Pagamento implements Serializable {
 
 	private static final long serialVersionUID = -7185033432370355020L;
@@ -26,17 +27,39 @@ public class Pagamento implements Serializable {
 
 	@Column(name = "data_pagamento", nullable = false)
 	private LocalDate dataPagamento;
+	
+	@Column(name = "numero_parcela", nullable = false)
+	private Integer numeroParcela;
+	
+	@Column(name = "valor_pagamento", precision = 18, scale = 4)
+    private BigDecimal valorPagamento;
 
 	@ManyToOne
-	@JoinColumn(name = "emprestimo_id", nullable = false)
+	@JoinColumn(name = "id_emprestimo", nullable = false)
 	private Emprestimo emprestimo;
+
+	public Emprestimo getEmprestimo() {
+		return emprestimo;
+	}
+
+	public void setEmprestimo(Emprestimo emprestimo) {
+		this.emprestimo = emprestimo;
+	}
 
 	public Pagamento() {
 	}
 
-	public Pagamento(LocalDate dataPagamento, Emprestimo emprestimo) {
+	public Pagamento(LocalDate dataPagamento) {
 		this.dataPagamento = dataPagamento;
-		this.emprestimo = emprestimo;
+
+	}	
+	
+	public Integer getNumeroParcela() {
+		return numeroParcela;
+	}
+
+	public void setNumeroParcela(Integer numeroParcela) {
+		this.numeroParcela = numeroParcela;
 	}
 
 	public Long getId() {
@@ -53,14 +76,6 @@ public class Pagamento implements Serializable {
 
 	public void setDataPagamento(LocalDate dataPagamento) {
 		this.dataPagamento = dataPagamento;
-	}
-
-	public Emprestimo getEmprestimo() {
-		return emprestimo;
-	}
-
-	public void setEmprestimo(Emprestimo emprestimo) {
-		this.emprestimo = emprestimo;
 	}
 
 	@Override
