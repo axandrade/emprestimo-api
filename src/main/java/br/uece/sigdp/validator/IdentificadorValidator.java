@@ -2,6 +2,7 @@ package br.uece.sigdp.validator;
 
 import br.uece.sigdp.exceptions.CnpjInvalidoException;
 import br.uece.sigdp.exceptions.CpfInvalidoException;
+import br.uece.sigdp.exceptions.IdentificadorInvalidoException;
 
 public class IdentificadorValidator {
 	
@@ -58,20 +59,34 @@ public class IdentificadorValidator {
 	    
 	    public static boolean validarEstudanteUniversitario(String identificador) {
 	        if (identificador.length() != 8) {
-	            return false;
+	            throw new IdentificadorInvalidoException("Identificador de estudante universitário deve ter 8 caracteres.");
 	        }
+
 	        int primeiroDigito = Character.getNumericValue(identificador.charAt(0));
 	        int ultimoDigito = Character.getNumericValue(identificador.charAt(7));
-	        return (primeiroDigito + ultimoDigito) == 9;
+
+	        if ((primeiroDigito + ultimoDigito) != 9) {
+	            throw new IdentificadorInvalidoException("A soma do primeiro e do último dígito do identificador de estudante universitário deve ser igual a 9.");
+	        }
+
+	        return true;
 	    }
+
 
 	    public static boolean validarAposentado(String identificador) {
 	        if (identificador.length() != 10) {
-	            return false;
+	            throw new IdentificadorInvalidoException("Identificador de aposentado deve ter 10 caracteres.");
 	        }
+
 	        char ultimoDigito = identificador.charAt(9);
 	        String primeirosNoveDigitos = identificador.substring(0, 9);
-	        return primeirosNoveDigitos.indexOf(ultimoDigito) == -1;
+
+	        if (primeirosNoveDigitos.indexOf(ultimoDigito) != -1) {
+	            throw new IdentificadorInvalidoException("Identificador de aposentado não deve repetir o último dígito nos primeiros nove dígitos.");
+	        }
+
+	        return true;
 	    }
+
 
 }

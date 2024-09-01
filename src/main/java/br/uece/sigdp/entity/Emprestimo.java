@@ -19,6 +19,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "emprestimos", schema = "emprestimo")
@@ -34,19 +36,24 @@ public class Emprestimo  implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "id_pessoa", nullable = false)
+    @NotNull(message = "A pessoa associada ao empréstimo não pode ser nula.")
     private Pessoa pessoa;
 
     @Column(name = "valor_emprestimo", precision = 18, scale = 4, nullable = false)
+    @NotNull(message = "O valor do empréstimo é obrigatório.")
     private BigDecimal valorEmprestimo;
 
     @Column(name = "numero_parcelas", nullable = false)
+    @Positive(message = "O número de parcelas deve ser maior que zero.")
     private int numeroParcelas;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_pagamento", length = 50, nullable = false)
+    @NotNull(message = "O status de pagamento é obrigatório.")
     private StatusPagamento statusPagamento;
 
     @Column(name = "data_criacao", nullable = false)
+    @NotNull(message = "A data de criação é obrigatória.")
     private LocalDate dataCriacao;   
     
     @OneToMany(mappedBy = "emprestimo", cascade = CascadeType.ALL, orphanRemoval = true)

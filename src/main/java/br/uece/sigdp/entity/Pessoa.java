@@ -17,6 +17,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 
 @Entity
 @Table(name = "pessoas", schema = "emprestimo")
@@ -30,22 +34,28 @@ public class Pessoa implements Serializable{
     private Long id;
     
     @Column(name = "nome", nullable = false)
+    @NotBlank(message = "O nome é obrigatório.")
     private String nome;
     
     @Column(name = "identificador", nullable = false, length = 20)
+    @NotBlank(message = "O identificador é obrigatório.")
     private String identificador;
     
     @Column(name = "data_nascimento")
+    @Past(message = "A data de nascimento deve ser no passado.")
     private LocalDate dataNascimento;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_identificador", nullable = false, length = 20)
+    @NotNull(message = "O tipo de identificador é obrigatório.")
     private TipoIdentificador tipoIdentificador;
     
     @Column(name = "valor_minimo_mensal_parcelas", precision = 15, scale = 2)
+    @DecimalMin(value = "0.00", inclusive = false, message = "O valor mínimo mensal das parcelas deve ser maior que zero.")
     private BigDecimal valorMinimoMensalParcelas;
     
     @Column(name = "valor_maximo_emprestimo", precision = 15, scale = 2)
+    @DecimalMin(value = "0.00", inclusive = false, message = "O valor máximo de empréstimo deve ser maior que zero.")
     private BigDecimal valorMaximoEmprestimo;
     
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)

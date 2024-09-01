@@ -13,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "pagamentos", schema = "emprestimo")
@@ -26,9 +28,12 @@ public class Pagamento implements Serializable {
 	private Long id;
 
 	@Column(name = "data_pagamento", nullable = false)
+	@NotNull(message = "A data de pagamento é obrigatória.")
 	private LocalDate dataPagamento;
 	
 	@Column(name = "numero_parcela", nullable = false)
+	@NotNull(message = "O número da parcela é obrigatório.")
+    @Positive(message = "O número da parcela deve ser maior que zero.")
 	private Integer numeroParcela;
 	
 	@Column(name = "valor_pagamento", precision = 18, scale = 4)
@@ -36,6 +41,7 @@ public class Pagamento implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "id_emprestimo", nullable = false)
+    @NotNull(message = "O empréstimo associado é obrigatório.")
 	private Emprestimo emprestimo;
 
 	public Emprestimo getEmprestimo() {
