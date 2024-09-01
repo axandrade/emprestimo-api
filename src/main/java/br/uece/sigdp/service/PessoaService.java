@@ -36,8 +36,8 @@ public class PessoaService {
         return pessoaRepository.findByIdentificador(identificador);
     }
 	
-	public boolean isIdentificadorValido(TipoIdentificador tipo, String identificador) {
-	    try {
+	public boolean isIdentificadorValido(TipoIdentificador tipo, String identificador) throws IdentificadorInvalidoException {
+	   
 	        if (tipo == TipoIdentificador.PESSOA_FISICA || tipo == TipoIdentificador.PESSOA_JURIDICA) {
 	            IdentificadorValidator.validarCpfCnpj(identificador);
 	        } else if (tipo == TipoIdentificador.ESTUDANTE_UNIVERSITARIO) {
@@ -45,27 +45,30 @@ public class PessoaService {
 	        } else if (tipo == TipoIdentificador.APOSENTADO) {
 	            return IdentificadorValidator.validarAposentado(identificador);
 	        }
-	    } catch (IdentificadorInvalidoException e) {
-	        return false;
-	    }
+	   
 	    return true;
 	}
 	
-	public boolean validarLimitesEmprestimo(Pessoa pessoa, BigDecimal valorEmprestimo, int numeroParcelas) {
-	    if (valorEmprestimo.compareTo(pessoa.getValorMaximoEmprestimo()) > 0) {
-	        throw new EmprestimoException("Valor do empréstimo excede o valor máximo permitido para o tipo de identificador.");
-	    }
+	public boolean validarLimitesEmprestimo(Pessoa pessoa, BigDecimal valorEmprestimo, int numeroParcelas) throws EmprestimoException {
+	    try {
+	        if (valorEmprestimo.compareTo(pessoa.getValorMaximoEmprestimo()) > 0) {
+	            throw new EmprestimoException("Valor do empréstimo excede o valor máximo permitido para o tipo de identificador.");
+	        }
 
-	    BigDecimal valorParcela = valorEmprestimo.divide(BigDecimal.valueOf(numeroParcelas), 2, RoundingMode.HALF_UP);
-	    if (valorParcela.compareTo(pessoa.getValorMinimoMensalParcelas()) < 0) {
-	        throw new EmprestimoException("Valor da parcela é inferior ao valor mínimo permitido para o tipo de identificador.");
-	    }
+	        BigDecimal valorParcela = valorEmprestimo.divide(BigDecimal.valueOf(numeroParcelas), 2, RoundingMode.HALF_UP);
+	        if (valorParcela.compareTo(pessoa.getValorMinimoMensalParcelas()) < 0) {
+	            throw new EmprestimoException("Valor da parcela é inferior ao valor mínimo permitido para o tipo de identificador.");
+	        }
 
-	    if (numeroParcelas > MAXIMO_PARCELAS_PERMITIDAS) {
-	        throw new EmprestimoException("Número de parcelas excede o máximo permitido ("+ MAXIMO_PARCELAS_PERMITIDAS + " parcelas).");
-	    }
+	        if (numeroParcelas > MAXIMO_PARCELAS_PERMITIDAS) {
+	            throw new EmprestimoException("Número de parcelas excede o máximo permitido (" + MAXIMO_PARCELAS_PERMITIDAS + " parcelas).");
+	        }
 
-	    return true;
+	        return true;
+
+	    } catch (Exception e) {
+	        throw new EmprestimoException("Erro ao validar limites do empréstimo: " + e.getMessage(), e);
+	    }
 	}
 	
 	public Page<PessoaDTO> findByFilter(String sortDirection, String sortField, int page, int size) {

@@ -21,7 +21,7 @@ public class PagamentoService {
 	private EmprestimoRepository emprestimoRepository;
 	
 	@Transactional
-	public void realizarPagamento(Long emprestimoId) {
+	public void realizarPagamento(Long emprestimoId) throws EmprestimoException {
 		Optional<Emprestimo> emprestimoOpt = emprestimoRepository.findById(emprestimoId);
 
 		if (emprestimoOpt.isEmpty()) {
@@ -32,6 +32,10 @@ public class PagamentoService {
         List<Pagamento> pagamentos = emprestimo.getPagamentos();
 
         int proximaParcela = pagamentos.size() + 1;
+        
+        if (emprestimo.getStatusPagamento() == StatusPagamento.QUITADO) {
+            throw new EmprestimoException("Empréstimo com ID " + emprestimoId + " já está quitado.");
+        }
         
         if (proximaParcela > emprestimo.getNumeroParcelas()) {
         	emprestimo.setStatusPagamento(StatusPagamento.QUITADO);

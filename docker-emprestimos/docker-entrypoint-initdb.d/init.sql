@@ -1,5 +1,6 @@
 CREATE SCHEMA emprestimo;
 
+
 CREATE TABLE emprestimo.pessoas (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -47,8 +48,10 @@ VALUES (6, 'Comércio XYZ Ltda', '98765432000123', '1992-11-15', 'PESSOA_JURIDIC
 INSERT INTO emprestimo.pessoas (id, nome, identificador, data_nascimento, tipo_identificador, valor_minimo_mensal_parcelas, valor_maximo_emprestimo) 
 VALUES (7, 'Lucas Almeida', '87654321', '2001-07-18', 'ESTUDANTE_UNIVERSITARIO', 100.00, 10000.00);
 INSERT INTO emprestimo.pessoas (id, nome, identificador, data_nascimento, tipo_identificador, valor_minimo_mensal_parcelas, valor_maximo_emprestimo) 
-VALUES (8, 'José Souza', '8765432100', '1948-01-29', 'APOSENTADO', 400.00, 25000.00);
+VALUES (8, 'José Souza', '8765432190', '1948-01-29', 'APOSENTADO', 400.00, 25000.00);
 INSERT INTO emprestimo.pessoas (id, nome, identificador, data_nascimento, tipo_identificador, valor_minimo_mensal_parcelas, valor_maximo_emprestimo) 
 VALUES (9, 'Clara Ribeiro', '23456789012', '1988-10-05', 'PESSOA_FISICA', 300.00, 10000.00);
 INSERT INTO emprestimo.pessoas (id, nome, identificador, data_nascimento, tipo_identificador, valor_minimo_mensal_parcelas, valor_maximo_emprestimo) 
 VALUES (10, 'Instituto ABC', '34567891000189', '2010-03-15', 'PESSOA_JURIDICA', 1000.00, 100000.00);
+
+
