@@ -3,7 +3,9 @@ package br.uece.sigdp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +43,19 @@ public class PessoaController {
         Page<PessoaDTO> result = pessoaService.findByFilter(sortDirection, sortField, page, size);
         return ResponseEntity.ok(result);
     }
+	
+	 @Operation(summary = "Deleta uma pessoa", description = "Deleta uma pessoa com base nos dados fornecidos no PessoaDTO.")
+	    @ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Pessoa deletada com sucesso"),
+	        @ApiResponse(responseCode = "400", description = "Requisição inválida", content = @Content),
+	        @ApiResponse(responseCode = "404", description = "Pessoa não encontrada", content = @Content),
+	        @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content)
+	    })
+	    @DeleteMapping("/delete")
+	    public ResponseEntity<Void> delete(@RequestBody PessoaDTO pessoaDTO) {
+	        pessoaService.deleteByDto(pessoaDTO);
+	        return ResponseEntity.ok().build();
+	    }
 
 	
 

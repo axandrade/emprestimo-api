@@ -1,6 +1,6 @@
 # Emprestimo API
 
-Este é um projeto Java com Spring Boot para gerenciar empréstimos. A aplicação fornece uma API RESTful que permite criar, atualizar, buscar e realizar pessoas, pagamentos e empréstimos.
+Este é um projeto Java com Spring Boot para gerenciar empréstimos. A aplicação fornece uma API RESTful que permite criar, atualizar, buscar e deletar pessoas, pagamentos e empréstimos.
 
 ## Tecnologias Usadas
 

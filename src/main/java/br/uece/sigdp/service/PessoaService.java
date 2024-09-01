@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.uece.sigdp.entity.Pessoa;
 import br.uece.sigdp.entity.dto.PessoaDTO;
@@ -81,5 +82,13 @@ public class PessoaService {
 		return map;
 	}
 
+	@Transactional
+    public void deleteByDto(PessoaDTO pessoaDTO) {
+        Pessoa pessoa = pessoaRepository.findById(pessoaDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+        pessoaRepository.delete(pessoa);
+    }
+	
+	
 
 }
