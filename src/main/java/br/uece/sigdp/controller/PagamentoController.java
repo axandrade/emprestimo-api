@@ -18,6 +18,7 @@ public class PagamentoController {
 	@Autowired
 	private PagamentoService pagamentoService;
 	
+	//http://localhost:8080/pagamentos/realizar-pagamento?emprestimoId=1
 	@PostMapping("/realizar-pagamento")
     public ResponseEntity<String> realizarPagamento(@RequestParam Long emprestimoId) {
         try {

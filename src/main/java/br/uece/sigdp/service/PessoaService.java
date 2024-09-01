@@ -5,13 +5,18 @@ import java.math.RoundingMode;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import br.uece.sigdp.entity.Pessoa;
+import br.uece.sigdp.entity.dto.PessoaDTO;
 import br.uece.sigdp.entity.enums.TipoIdentificador;
 import br.uece.sigdp.exceptions.EmprestimoException;
 import br.uece.sigdp.exceptions.IdentificadorInvalidoException;
 import br.uece.sigdp.repository.PessoaRepository;
+import br.uece.sigdp.util.ModelMapperUtil;
 import br.uece.sigdp.validator.IdentificadorValidator;
 
 
@@ -20,6 +25,9 @@ public class PessoaService {
 	
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private ModelMapperUtil modelMapper;
 	
     private static final int MAXIMO_PARCELAS_PERMITIDAS = 24;
 
@@ -58,6 +66,16 @@ public class PessoaService {
 	    }
 
 	    return true;
+	}
+	
+	public Page<PessoaDTO> findByFilter(String sortDirection, String sortField, int page, int size) {
+
+		PageRequest pageRquest = PageRequest.of(page, size, Sort.Direction.fromString(sortDirection.trim()),
+				sortField.trim());
+
+		Page<PessoaDTO> map = pessoaRepository.findAll(pageRquest).map(post -> modelMapper.map(post, PessoaDTO.class));
+
+		return map;
 	}
 
 

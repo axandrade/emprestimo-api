@@ -27,6 +27,16 @@ public class EmprestimoController {
 	@Autowired
 	private EmprestimoService emprestimoService;
 	
+//http://localhost:8080/emprestimos/realizar-emprestimo
+//	{
+//	    "pessoa": {
+//	        "id": 2,
+//	        "nome": "Empresa DBZ",
+//	        "identificador": "54924564000140"       
+//	    },
+//	    "valorEmprestimo": 80000.00,
+//	    "numeroParcelas": 10
+//	}
 	@PostMapping("/realizar-emprestimo")
 	public ResponseEntity<Emprestimo> realizarEmprestimo(@RequestBody EmprestimoDTO emprestimoDTO) {
 	    Optional<Pessoa> pessoaOpt = pessoaService
